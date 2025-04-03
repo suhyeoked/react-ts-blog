@@ -1,26 +1,30 @@
 import React from 'react'
 
+interface ModalProps {
+  blogtitle : string[]
+  setBlogTitle: React.Dispatch<React.SetStateAction<string[]>>;
+  modalTitle : number
+}
 
+function Modal(props:ModalProps) {
 
-function Modal(props : any) {
   return (
-    <>
+    <div>
+      <button onClick={
+                ()=>{
+                  let copy = [...props.blogtitle]
+                  copy[props.modalTitle] = "수유 우동 맛집"
+                  props.setBlogTitle(copy)
+                }
+              }>
+                클릭시 수유 우동 맛집으로 바뀜
+      </button>
       <div className="modal">
-        <h4>
-          {props.ModalProps[0]}
-        </h4>
-        <p>날짜</p>
-        <p>상세내용</p>
-        <button onClick={()=>{
-          let change = [...props.ModalProps]
-          change[0] = "여자 코트 추천"
-          props.ModalProps(change)
-        }
-        }>
-          글 수정
-        </button>
+            <h4>{props.blogtitle[props.modalTitle]}</h4>
+            <p>날짜</p>
+            <p>상세 내용</p>
       </div>
-    </>
+    </div>
   )
 }
 

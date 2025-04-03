@@ -1,24 +1,52 @@
-.black-nav {
-  display: flex;
-  background-color: black;
-  width: 100%;
-  color: white;
-  padding-left: 20px;
+.App {
+    text-align: center;
 }
 
-div{
-  box-sizing: border-box;
+.black-nav {
+    background-color: black;
+    display: flex;
+    width: 100%;
+    color: white;
+    padding-left: 20px;
+}
+
+div {
+    box-sizing: border-box;
 }
 
 .list {
-  padding-left: 20px;
-  text-align: left;
-  border-bottom: 1px solid gray;
+    padding-left: 20px;
+    text-align: left;
+    border-bottom: 1px solid gray;
+}
+
+.likeClick {
+    cursor: pointer;
+}
+
+.like {
+    margin-left: 4px;
+    font-weight: bold;
 }
 
 .modal {
-  margin-top: 20px;
-  padding: 20px;
-  background-color: #eee;
-  text-align: left;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #eee;
+    text-align: left;
+}
+.blogTitle {
+    list-style: none;
+    align-items: baseline;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.blogTitle h4 {
+    cursor: pointer;
+}
+
+.blogTitle > li:not(li:first-child) {
+    margin-left: 10px;
 }

@@ -52,4 +52,3 @@ export default tseslint.config({
   },
 })
 ```
-# react-ts-blog

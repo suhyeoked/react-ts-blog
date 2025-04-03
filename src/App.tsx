@@ -1,89 +1,111 @@
-import {useEffect, useState} from 'react';
-import Modal from './component/Modal';
+import { useState } from 'react'
 import './App.css'
-// import './reset.css'
-function App() {
-    let [title, setTitle] = useState<string[]>(
-        ["남자 코트추천", "강남우동 맛집", "React 독학", "노원 우동 맛집"]
-    );
-    // useState를 사용하는 이유 변수명 내용을 변경하면 html코드도 바꿔줘야 하는데 useState를 사용하면 자동 재렌더링이 됨
-    let [good, setGood] = useState<number[]>([]);
-    //setGood은 state변경 함수
-    let [modal, setModal] = useState<boolean>(false);
-    useEffect(()=>{
-        setGood(new Array(title.length).fill(0))
-    } , [title])
-    return (
-        <div className = "App" > <button onClick = {
-            () => {
-                let copy1:string[] = [...title]
-                copy1.sort();
-                setTitle(copy1);
-            }
-        } > 가나다순정렬</button> <button onClick = {
-            () => {
-                let copy = [...title];
-                copy[0] = "여자 코트 추천";
-                setTitle(copy);
-            }
-        } > 버튼</button> < div className = "black-nav" > <h4> 블로그임</h4></div> {/* <div className="list">
-        <h4>
-        {title[0]}
-        <span onClick={()=>setGood(good + 1
-              //useState는 = 사용안하는걸 권장
-              //ex)good = good + 1
-              //해도 되긴하는데 html에서는 변경이 안됨
-        )}>
-        👍
-        </span>
-        {good}
-        </h4>
-        <p>
-          2월 17일 발행
-        </p>
-      </div>
+import Modal from './component/Modal';
 
-      <div className="list">
-        <h4 onClick={
-          ()=> {setModal(!modal)}
-          //클릭하기 전 State값은 false지만
-          //클릭을 하면 false의 반대인 true로 변함
-          //밑에 삼항연산자로 명시적 표현
-        }>
-        {title[2]}
-        </h4>
-        <p>
-          2월 17일 발행
-        </p>
-      </div> */
-        } 
-        {
-            title.map(function(a: string ,i : number){
-                return(
-                    <div className="list">
-                        <h4 onClick={
-          ()=> {setModal(!modal)}}>
-                            {title[i]}
-                            <span onClick={()=>{
-                                let copygood: number[] = [...good]
-                                copygood[i] = copygood[i] + 1
-                                setGood(copygood)
-                                console.log(setGood(copygood))
-                            }}>👍</span> {good[i]}
-                        </h4>
-                        <p>
-                            2월 18일 발행
-                        </p>
-                    </div>
-                )
+
+function App() {
+  let [blogtitle , setBlogTitle] = useState<string[]>(["강남 우동 맛집" , "은행동 맛집","노원동 라멘 맛집"])
+  let [like, setLike] = useState<number[]>(new Array(blogtitle.length).fill(0));
+  let [modal , setModal] = useState<boolean>(false);
+  let [modalTitle , setModalTitle] = useState<number>(0);
+  let [inputTitle , setInputTitle] = useState<string>("");
+
+  return (
+    <div className="App">
+        <div className="black-nav">
+          <h4>블로그</h4>
+        </div>
+        <button onClick={
+            ()=>{
+              let copy:string[] = [...blogtitle]
+              copy[0] = "강북 우동 맛집"
+              setBlogTitle(copy)
+            }
+          }>클릭시 강북 우동 맛집으로 바뀜</button>
+          <button onClick={
+            ()=>{
+              let copy:string[] = [...blogtitle]
+              copy.sort()
+              setBlogTitle(copy)
+            }
+          }>
+            클릭시 가나다순 정렬
+          </button>
+          {
+            blogtitle.map(function(a : any , i : number){
+              return(
+                <div className="list">
+                  <ul className="blogTitle">
+                <li><h4 onClick={
+                  ()=>{
+                    setModal(!modal)
+                    setModalTitle(i)
+                  }
+                }>{blogtitle[i]}
+                </h4>
+                <button onClick={()=>{
+                    let copy = [...blogtitle]
+                    copy.shift();
+                    setBlogTitle(copy)
+                }}>
+                  삭제
+                </button>
+                </li>
+                <li><span className="likeClick" onClick={
+                  // span태그를 밖으로 꺼내지 않고 {e.stopPropagation(); } 이걸 사용해도 괜찮음
+                  // 이유는 상위 html로 퍼지는 이벤트버블리을 막는 함수이기 때문
+                    ()=>{
+                      if(!like) return;
+                      let copy = [...like]
+                      copy[i] += 1;
+                      setLike(copy)
+                    }
+                  }> 👍</span>
+                  </li>
+                  <li>
+                    <span className="like">
+                  {
+                    like[i]
+                  }
+                  </span>
+                  </li>
+                  </ul>
+                <p>2월 17일 발행</p>
+            </div>
+              )
             })
-        }
+          }
+          <div>
+          <input onChange={(e)=>
+            {
+              setInputTitle(e.target.value)
+              console.log(inputTitle)
+              // 하나를 입력하면 공백 먼저 입력이 되는 걸 볼 수 있는데
+              // 이유는 리액트는 비동기 방식이기 때문임
+              // 그래서 setInputTitle(e.target.value)이게 완료되기 전에
+              // console.log(inputTitle)이게 먼저 실행됨
+            }
+          } type="text" />
+          <button onClick={
+            ()=>{
+              let copy = [...blogtitle]
+              copy.unshift(inputTitle)
+              setBlogTitle(copy)
+              console.log("클릭됨")
+            }
+          }>
+            입력
+          </button>
+          </div>
+          
         {
-            modal == true
-                ? <Modal ModalProps = {title}/>
-                : null
-        }</div>
-    )
+          modal == true ? <Modal blogtitle = {blogtitle} setBlogTitle = {setBlogTitle} modalTitle = {modalTitle}/> : null
+        }
+
+    </div>
+  )
 }
+
+
 
 export default App
